@@ -515,18 +515,25 @@ main {
     .wh-stages-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
     .wh-stages-eye { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-tertiary); }
     .wh-stages-meta { font-size:11px; color:var(--text-tertiary); font-family:var(--font-mono); }
-    .wh-stages-bar { display:flex; height:10px; background:rgba(255,255,255,0.04); border-radius:999px; overflow:hidden; margin-bottom:12px; border:1px solid rgba(255,255,255,0.04); }
-    .wh-stage { height:100%; transition:width 0.7s cubic-bezier(0.22,1,0.36,1); }
-    .wh-stage-rem   { background:#FFF; }
-    .wh-stage-deep  { background:#B8B6B0; }
-    .wh-stage-light { background:#76746E; }
-    .wh-stage-awake { background:#38362F; }
-    .wh-stages-legend { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    .wh-stages { --st-awake:#E4E4EA; --st-light:#A9A4F4; --st-deep:#F08BE6; --st-rem:#A24CEB; }
+    .wh-stages-legend { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
     .wh-leg { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-secondary); font-weight:500; }
     .wh-leg-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
-    .wh-leg-dot.d-rem{background:#FFF} .wh-leg-dot.d-deep{background:#B8B6B0} .wh-leg-dot.d-light{background:#76746E} .wh-leg-dot.d-awake{background:#38362F; border:1px solid rgba(255,255,255,0.10);}
+    .d-awake{background:var(--st-awake)} .d-light{background:var(--st-light)} .d-deep{background:var(--st-deep)} .d-rem{background:var(--st-rem)}
     .wh-leg-num { margin-left:auto; color:var(--text-primary); font-weight:700; font-family:var(--font-mono); font-size:11px; }
     @media (max-width:480px) { .wh-stages-legend { grid-template-columns:repeat(2,1fr); } }
+    /* Stage graph */
+    .wh-graph { display:flex; flex-direction:column; gap:14px; }
+    .wh-row-head { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
+    .wh-row-name { font-size:10.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-primary); }
+    .wh-row-pct { font-size:10.5px; font-weight:700; font-family:var(--font-mono); }
+    .wh-row-dur { margin-left:auto; font-size:13px; font-weight:700; color:var(--text-primary); font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+    .wh-track { height:12px; border-radius:3px; overflow:hidden; background:repeating-linear-gradient(135deg, rgba(255,255,255,0.07) 0 2px, transparent 2px 6px); }
+    .wh-fill { height:100%; width:0%; border-radius:3px; transition:width 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .wh-fill.d-awake { min-width:4px; }
+    .wh-restor { display:flex; align-items:center; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.05); }
+    .wh-restor-sw { width:14px; height:14px; border-radius:3px; background:linear-gradient(135deg, var(--st-deep), var(--st-rem)); flex-shrink:0; }
+    .wh-restor-name { font-size:10.5px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-secondary); }
     /* Stats */
     .wh-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding-top:22px; border-top:1px solid rgba(255,255,255,0.05); }
     .wh-stat { position:relative; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.04); border-radius:12px; padding:12px 10px; text-align:center; }
@@ -596,18 +603,19 @@ main {
         </div>
         <div id="whStages" class="wh-stages" style="display:none">
           <div class="wh-stages-head"><span class="wh-stages-eye">Sleep stages</span><span class="wh-stages-meta" id="whStagesMeta">—</span></div>
-          <div class="wh-stages-bar">
-            <div class="wh-stage wh-stage-rem"   id="whBarRem"   style="width:0%"></div>
-            <div class="wh-stage wh-stage-deep"  id="whBarDeep"  style="width:0%"></div>
-            <div class="wh-stage wh-stage-light" id="whBarLight" style="width:0%"></div>
-            <div class="wh-stage wh-stage-awake" id="whBarAwake" style="width:0%"></div>
-          </div>
           <div class="wh-stages-legend">
-            <div class="wh-leg"><span class="wh-leg-dot d-rem"></span>REM<span class="wh-leg-num" id="whRem">—</span></div>
-            <div class="wh-leg"><span class="wh-leg-dot d-deep"></span>Deep<span class="wh-leg-num" id="whDeep">—</span></div>
-            <div class="wh-leg"><span class="wh-leg-dot d-light"></span>Light<span class="wh-leg-num" id="whLight">—</span></div>
             <div class="wh-leg"><span class="wh-leg-dot d-awake"></span>Awake<span class="wh-leg-num" id="whAwake">—</span></div>
+            <div class="wh-leg"><span class="wh-leg-dot d-light"></span>Light<span class="wh-leg-num" id="whLight">—</span></div>
+            <div class="wh-leg"><span class="wh-leg-dot d-deep"></span>Deep<span class="wh-leg-num" id="whDeep">—</span></div>
+            <div class="wh-leg"><span class="wh-leg-dot d-rem"></span>REM<span class="wh-leg-num" id="whRem">—</span></div>
           </div>
+          <div class="wh-graph">
+            <div><div class="wh-row-head"><span class="wh-row-name">Awake</span><span class="wh-row-pct" style="color:var(--st-awake)" id="whPctAwake">—</span><span class="wh-row-dur" id="whDurAwake">—</span></div><div class="wh-track"><div class="wh-fill d-awake" id="whBarAwake"></div></div></div>
+            <div><div class="wh-row-head"><span class="wh-row-name">Light</span><span class="wh-row-pct" style="color:var(--st-light)" id="whPctLight">—</span><span class="wh-row-dur" id="whDurLight">—</span></div><div class="wh-track"><div class="wh-fill d-light" id="whBarLight"></div></div></div>
+            <div><div class="wh-row-head"><span class="wh-row-name">SWS (Deep)</span><span class="wh-row-pct" style="color:var(--st-deep)" id="whPctDeep">—</span><span class="wh-row-dur" id="whDurDeep">—</span></div><div class="wh-track"><div class="wh-fill d-deep" id="whBarDeep"></div></div></div>
+            <div><div class="wh-row-head"><span class="wh-row-name">REM</span><span class="wh-row-pct" style="color:var(--st-rem)" id="whPctRem">—</span><span class="wh-row-dur" id="whDurRem">—</span></div><div class="wh-track"><div class="wh-fill d-rem" id="whBarRem"></div></div></div>
+          </div>
+          <div class="wh-restor"><span class="wh-restor-sw"></span><span class="wh-restor-name">Restorative sleep</span><span class="wh-row-dur" id="whRestor">—</span></div>
         </div>
         <div class="wh-stats">
           <div class="wh-stat"><span class="wh-zone" id="whZoneSleep"></span><div class="wh-stat-label">Sleep</div><div class="wh-stat-val" id="whSleep">—</div><div class="wh-stat-sub" id="whSleepSub">—</div></div>
@@ -775,15 +783,15 @@ main {
             const total = rem + deep + light + awake;
             if (total > 0) {
               $('whStages').style.display = '';
-              $('whBarRem').style.width   = (100*rem/total)   + '%';
-              $('whBarDeep').style.width  = (100*deep/total)  + '%';
-              $('whBarLight').style.width = (100*light/total) + '%';
-              $('whBarAwake').style.width = (100*awake/total) + '%';
               $('whStagesMeta').textContent = fmtMins(total) + ' total';
-              $('whRem').textContent   = fmtMinsShort(rem);
-              $('whDeep').textContent  = fmtMinsShort(deep);
-              $('whLight').textContent = fmtMinsShort(light);
-              $('whAwake').textContent = fmtMinsShort(awake);
+              [['Awake', awake], ['Light', light], ['Deep', deep], ['Rem', rem]].forEach(([k, v]) => {
+                const pct = Math.round(100 * v / total);
+                $('whBar' + k).style.width = (100 * v / total) + '%';
+                $('whPct' + k).textContent = pct + '%';
+                $('whDur' + k).textContent = fmtMinsShort(v);
+                $('wh' + k).textContent = pct + '%';
+              });
+              $('whRestor').textContent = fmtMinsShort(deep + rem);
             }
           }
         }
