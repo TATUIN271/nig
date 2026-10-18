@@ -116,7 +116,7 @@ A circular SVG progress ring that fills throughout the day, paired with a text c
 - On screens ≤ 480px: ring shrinks to 144×144, percentage to 32px, status to 13px.
 
 **Behavior**
-- The "awake window" runs 6:30 AM → 8:00 PM (13.5 hours = 100%). Define `WAKE_HOUR = 6.5` and `SLEEP_HOUR = 20` as constants at the top so they're easy to tweak.
+- The "awake window" runs 6:30 AM → 10:00 PM (15.5 hours = 100%). Define `WAKE_HOUR = 6.5` and `SLEEP_HOUR = 22` as constants at the top so they're easy to tweak.
 - Compute current hours as `now.getHours() + now.getMinutes()/60 + now.getSeconds()/3600`.
 
   | Time | Behavior |
