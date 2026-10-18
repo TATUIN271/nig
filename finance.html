@@ -1444,6 +1444,9 @@ html, body { scrollbar-width: none; -ms-overflow-style: none; }
   color-scheme: dark;
 }
 input[type="date"] { color-scheme: dark; }
+/* All dropdowns: black background, white text (closed and open list) */
+select { background-color: #000 !important; color: #fff !important; color-scheme: dark; }
+select option, select optgroup { background-color: #000; color: #fff; }
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.85);
   opacity: 0.7;
@@ -2540,14 +2543,16 @@ input[type="date"]::-webkit-calendar-picker-indicator {
         metaLine;
       const cost = document.createElement('div');
       cost.style.cssText = 'text-align:right;line-height:1.1';
-      const bigNum = fmtMoney(m);
+      // Yearly subs show the yearly fee; others show the monthly equivalent.
+      const isYearly = it.period === 'yearly';
+      const bigNum = fmtMoney(isYearly ? it.amount : m);
       const origHint = (it.entered_currency && it.entered_currency !== displayCcy() && it.entered_amount != null)
         ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + fmtCcy(it.entered_amount, it.entered_currency) + ' / ' + it.period + '</div>'
-        : (it.period !== 'monthly'
+        : (it.period !== 'monthly' && !isYearly
             ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + fmtMoney(it.amount) + ' / ' + it.period + '</div>'
             : '');
       cost.innerHTML = '<div style="font-size:20px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums">' + bigNum + '</div>' +
-        '<div style="font-size:10px;color:var(--text-tertiary);margin-top:1px">/ month</div>' +
+        '<div style="font-size:10px;color:var(--text-tertiary);margin-top:1px">' + (isYearly ? '/ year' : '/ month') + '</div>' +
         origHint;
       const actions = document.createElement('div');
       actions.style.cssText = 'display:flex;flex-direction:column;gap:4px;align-items:center';

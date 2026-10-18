@@ -71,6 +71,8 @@ body.has-bottombar {
   .bottombar-tab { font-size: 10px; }
 }
 html, body { -webkit-text-size-adjust: 100%; }
+select { background-color: #000 !important; color: #fff !important; color-scheme: dark; }
+select option, select optgroup { background-color: #000; color: #fff; }
 @media (max-width: 768px) {
   html { touch-action: pan-y; }
   ::-webkit-scrollbar { width: 0; height: 0; display: none; }
