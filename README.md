@@ -25,12 +25,13 @@ Each app stores its own state in browser `localStorage`. No accounts, no server.
 
 ## WHOOP card (Health page)
 
-The WHOOP card needs the Vercel function in [api/whoop.js](api/whoop.js), so it only works on the deployed site.
+The WHOOP card needs the Vercel functions in [api/](api/) (`whoop-callback`, `whoop-refresh`, `whoop-data`), so it only works on the deployed site.
 
-1. Go to [developer.whoop.com](https://developer.whoop.com), create an app, and add the redirect URL `https://YOUR-SITE.vercel.app/health.html`.
-2. Turn on the scopes `read:recovery`, `read:cycles`, `read:sleep` and `offline`.
+1. Go to [developer.whoop.com](https://developer.whoop.com), create an app, and add the redirect URL `https://YOUR-SITE.vercel.app/api/whoop-callback`.
+2. Turn on the scopes `read:recovery`, `read:sleep`, `read:workout`, `read:cycles`, `read:profile`, `read:body_measurement` and `offline`.
 3. In Vercel → Project → Settings → Environment Variables, add `WHOOP_CLIENT_ID`, `WHOOP_CLIENT_SECRET` and `WHOOP_REDIRECT_URI` (the same URL as step 1), then redeploy.
-4. Open the Health page and tap **Connect WHOOP**. Each device connects separately; WHOOP logins aren't synced.
+4. Put your Client ID in the `CLIENT_ID` line of the WHOOP card script in [health.html](health.html).
+5. Open the Health page and tap **Connect WHOOP**. Each device connects separately; WHOOP logins aren't synced.
 
 ## Building from scratch
 
