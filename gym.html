@@ -1355,6 +1355,243 @@ img, video, canvas, svg { max-width: 100%; }
     </button>
   </div>
 
+  <!-- WHOOP ACTIVITY — workouts from the WHOOP API (same tokens as the Health page) -->
+  <style>
+    .wa-section { margin-bottom: 22px; }
+    .wa-card { background: var(--bg-card); border: 1px solid rgba(74,163,255,0.12); border-radius: 18px; padding: 20px; }
+    .wa-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .wa-seg { display: flex; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 2px; }
+    .wa-seg button { border: none; background: transparent; color: var(--text-3); font-family: inherit; font-size: 11.5px; font-weight: 700; padding: 6px 12px; border-radius: 7px; cursor: pointer; }
+    .wa-seg button.active { background: #fff; color: #0a0a0b; }
+    .wa-refresh { width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.04); border: 1px solid var(--border); color: var(--text-2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.4s; }
+    .wa-refresh.spin { transform: rotate(360deg); }
+    .wa-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .wa-stat { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; text-align: center; min-width: 0; }
+    .wa-stat-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    .wa-stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+    .wa-stat-val.strain { color: #4AA3FF; }
+    .wa-sub { font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin: 20px 0 10px; }
+    .wa-zones { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,0.04); }
+    .wa-zones > div { height: 100%; }
+    .wa-zone-legend { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-top: 8px; }
+    .wa-zl { font-size: 10px; color: var(--text-3); text-align: center; font-family: var(--font-mono); }
+    .wa-zl b { display: block; font-size: 9.5px; letter-spacing: 0.08em; color: var(--text-2); font-family: var(--font); margin-bottom: 2px; }
+    .wa-zl i { display: inline-block; width: 7px; height: 7px; border-radius: 2px; margin-right: 4px; vertical-align: 0; }
+    .wa-sports { display: flex; flex-wrap: wrap; gap: 6px; }
+    .wa-chip { font-size: 11.5px; font-weight: 600; color: var(--text-2); background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 999px; padding: 5px 10px; }
+    .wa-chip b { color: var(--text-1); margin-left: 4px; font-family: var(--font-mono); }
+    .wa-list { display: flex; flex-direction: column; gap: 8px; }
+    .wa-item { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+    .wa-item-top { display: flex; align-items: center; gap: 10px; }
+    .wa-item-icon { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
+    .wa-item-main { flex: 1; min-width: 0; }
+    .wa-item-name { font-size: 14px; font-weight: 600; color: var(--text-1); text-transform: capitalize; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .wa-item-meta { font-size: 11px; color: var(--text-3); margin-top: 2px; font-family: var(--font-mono); }
+    .wa-item-strain { text-align: right; flex-shrink: 0; }
+    .wa-item-strain-num { font-size: 20px; font-weight: 700; color: #4AA3FF; font-variant-numeric: tabular-nums; line-height: 1; }
+    .wa-item-strain-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; color: var(--text-3); margin-top: 3px; }
+    .wa-item-facts { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 10px 0 8px 38px; font-size: 11.5px; color: var(--text-2); }
+    .wa-item-facts span b { color: var(--text-1); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .wa-item .wa-zones { height: 6px; margin-left: 38px; }
+    .wa-more { display: block; width: 100%; margin-top: 8px; padding: 9px; background: transparent; border: 1px solid var(--border); border-radius: 10px; color: var(--text-2); font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .wa-empty, .wa-msg { font-size: 13px; color: var(--text-3); text-align: center; padding: 14px 6px; line-height: 1.5; }
+    .wa-msg a { color: var(--text-1); }
+    .wa-err { background: rgba(255,107,107,0.08); border: 1px solid rgba(255,107,107,0.28); color: #FF8A8A; padding: 10px 12px; border-radius: 10px; font-size: 11.5px; font-family: var(--font-mono); margin-bottom: 12px; }
+    @media (max-width: 480px) {
+      .wa-card { padding: 16px 14px; }
+      .wa-stats { grid-template-columns: repeat(2, 1fr); }
+      .wa-zone-legend { grid-template-columns: repeat(3, 1fr); row-gap: 8px; }
+    }
+  </style>
+  <div class="wa-section">
+    <div class="wt-divider"><span>WHOOP ACTIVITY</span></div>
+    <div class="wa-card">
+      <div id="waDisc" class="wa-msg" style="display:none">WHOOP isn't connected. Connect it on the <a href="health.html">Health page</a> to see your workouts here.</div>
+      <div id="waConn" style="display:none">
+        <div class="wa-head">
+          <div class="wa-seg" id="waRange">
+            <button type="button" data-days="7" class="active">7 days</button>
+            <button type="button" data-days="30">30 days</button>
+          </div>
+          <button id="waRefresh" class="wa-refresh" type="button" aria-label="Refresh"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.49 15A9 9 0 1 1 5.64 5.64L23 10"/></svg></button>
+        </div>
+        <div id="waErr" class="wa-err" style="display:none"></div>
+        <div class="wa-stats">
+          <div class="wa-stat"><div class="wa-stat-label">Workouts</div><div class="wa-stat-val" id="waCount">—</div></div>
+          <div class="wa-stat"><div class="wa-stat-label">Active time</div><div class="wa-stat-val" id="waTime">—</div></div>
+          <div class="wa-stat"><div class="wa-stat-label">Calories</div><div class="wa-stat-val" id="waKcal">—</div></div>
+          <div class="wa-stat"><div class="wa-stat-label">Avg strain</div><div class="wa-stat-val strain" id="waStrain">—</div></div>
+        </div>
+        <div class="wa-sub">Heart rate zones</div>
+        <div class="wa-zones" id="waZones"></div>
+        <div class="wa-zone-legend" id="waZoneLegend"></div>
+        <div class="wa-sub">Sports</div>
+        <div class="wa-sports" id="waSports"></div>
+        <div class="wa-sub">Recent workouts</div>
+        <div class="wa-list" id="waList"></div>
+        <button type="button" class="wa-more" id="waMore" style="display:none">Show more</button>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function () {
+    const KEY = 'whoop_tokens_v1';
+    const ZONES = [
+      { key: 'zone_zero_milli',  name: 'Z0', color: 'rgba(255,255,255,0.18)' },
+      { key: 'zone_one_milli',   name: 'Z1', color: '#7DA7D9' },
+      { key: 'zone_two_milli',   name: 'Z2', color: '#4AA3FF' },
+      { key: 'zone_three_milli', name: 'Z3', color: '#6EE7B7' },
+      { key: 'zone_four_milli',  name: 'Z4', color: '#FBBF24' },
+      { key: 'zone_five_milli',  name: 'Z5', color: '#FF8A8A' }
+    ];
+    const ICONS = [
+      [/run/, '🏃'], [/walk|hik/, '🚶'], [/cycl|bik|spin/, '🚴'], [/swim/, '🏊'],
+      [/weight|lift|strength|power|functional|crossfit/, '🏋️'], [/yoga|pilates|stretch|mobility/, '🧘'],
+      [/box|kickbox|martial|mma|jiu|wrestl/, '🥊'], [/tennis|padel|squash|badminton|pickle/, '🎾'],
+      [/soccer|football/, '⚽'], [/basketball/, '🏀'], [/row/, '🚣'], [/ski|snowboard/, '⛷️'],
+      [/climb/, '🧗'], [/hiit|interval|circuit|boot/, '🔥']
+    ];
+    const PAGE = 8;
+    let workouts = [], rangeDays = 7, shown = PAGE;
+
+    const $ = (id) => document.getElementById(id);
+    function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } }
+    function save(t) { try { localStorage.setItem(KEY, JSON.stringify(t)); } catch (e) {} }
+    function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+    function showErr(m) { $('waErr').textContent = m || ''; $('waErr').style.display = m ? 'block' : 'none'; }
+
+    async function refreshTok(t) {
+      if (!t.refresh) return null;
+      try {
+        const r = await fetch('/api/whoop-refresh', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: t.refresh }) });
+        const j = await r.json();
+        if (j.access_token) {
+          const next = { access: j.access_token, refresh: j.refresh_token || t.refresh, expires: Date.now() + (j.expires_in || 3500) * 1000 };
+          save(next); return next;
+        }
+      } catch (e) {}
+      return null;
+    }
+    async function whFetch(path, params, t) {
+      const qs = new URLSearchParams(params); qs.set('path', path);
+      const r = await fetch('/api/whoop-data?' + qs.toString(), { headers: { 'Authorization': 'Bearer ' + t.access, 'Accept': 'application/json' } });
+      if (r.status === 401) { const n = await refreshTok(t); if (n) return whFetch(path, params, n); throw new Error('unauthorized — reconnect WHOOP on the Health page'); }
+      if (!r.ok) throw new Error('WHOOP ' + r.status + ': ' + (await r.text()));
+      return r.json();
+    }
+
+    function fmtDur(ms) { const m = Math.round(ms / 60000); const h = Math.floor(m / 60); return h > 0 ? h + 'h ' + (m % 60) + 'm' : m + 'm'; }
+    function kcalOf(w) { return w.score && w.score.kilojoule != null ? w.score.kilojoule / 4.184 : 0; }
+    function durOf(w) { return Math.max(0, new Date(w.end) - new Date(w.start)); }
+    function sportOf(w) { return String(w.sport_name || 'activity').replace(/[-_]/g, ' '); }
+    function iconOf(name) { const n = name.toLowerCase(); for (const [re, ic] of ICONS) if (re.test(n)) return ic; return '⚡'; }
+    function fmtWhen(iso) {
+      const d = new Date(iso);
+      const day = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+      return day + ' · ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    }
+    function zoneBar(zd) {
+      const vals = ZONES.map(z => (zd && zd[z.key]) || 0);
+      const total = vals.reduce((a, b) => a + b, 0);
+      if (!total) return '';
+      return ZONES.map((z, i) => vals[i] ? '<div style="width:' + (100 * vals[i] / total) + '%;background:' + z.color + '"></div>' : '').join('');
+    }
+
+    function render() {
+      const since = Date.now() - rangeDays * 864e5;
+      const inRange = workouts.filter(w => new Date(w.start).getTime() >= since);
+      const scored = inRange.filter(w => w.score);
+      const totalMs = inRange.reduce((s, w) => s + durOf(w), 0);
+      const kcal = scored.reduce((s, w) => s + kcalOf(w), 0);
+      const strains = scored.map(w => Number(w.score.strain)).filter(v => !isNaN(v));
+      $('waCount').textContent = String(inRange.length);
+      $('waTime').textContent = inRange.length ? fmtDur(totalMs) : '—';
+      $('waKcal').textContent = scored.length ? Math.round(kcal).toLocaleString() : '—';
+      $('waStrain').textContent = strains.length ? (strains.reduce((a, b) => a + b, 0) / strains.length).toFixed(1) : '—';
+
+      // Zones across the whole range
+      const zSum = {};
+      ZONES.forEach(z => { zSum[z.key] = scored.reduce((s, w) => s + ((w.score.zone_durations || {})[z.key] || 0), 0); });
+      $('waZones').innerHTML = zoneBar(zSum);
+      $('waZoneLegend').innerHTML = ZONES.map(z => '<div class="wa-zl"><b><i style="background:' + z.color + '"></i>' + z.name + '</b>' + (zSum[z.key] ? fmtDur(zSum[z.key]) : '—') + '</div>').join('');
+
+      // Sports breakdown
+      const bySport = {};
+      inRange.forEach(w => { const n = sportOf(w); bySport[n] = (bySport[n] || 0) + 1; });
+      const sports = Object.entries(bySport).sort((a, b) => b[1] - a[1]);
+      $('waSports').innerHTML = sports.length
+        ? sports.map(([n, c]) => '<span class="wa-chip">' + iconOf(n) + ' <span style="text-transform:capitalize">' + esc(n) + '</span><b>' + c + '</b></span>').join('')
+        : '<span class="wa-chip">—</span>';
+
+      // List
+      const list = $('waList');
+      if (!inRange.length) {
+        list.innerHTML = '<div class="wa-empty">No WHOOP workouts in the last ' + rangeDays + ' days.</div>';
+        $('waMore').style.display = 'none';
+        return;
+      }
+      list.innerHTML = inRange.slice(0, shown).map(w => {
+        const s = w.score || {};
+        const name = sportOf(w);
+        const facts = ['<span>⏱ <b>' + fmtDur(durOf(w)) + '</b></span>'];
+        if (s.average_heart_rate) facts.push('<span>❤️ <b>' + s.average_heart_rate + '</b> avg · <b>' + (s.max_heart_rate || '—') + '</b> max</span>');
+        if (s.kilojoule != null) facts.push('<span>🔥 <b>' + Math.round(kcalOf(w)) + '</b> kcal</span>');
+        if (s.distance_meter) facts.push('<span>📍 <b>' + (s.distance_meter / 1000).toFixed(2) + '</b> km</span>');
+        return '<div class="wa-item">'
+          + '<div class="wa-item-top">'
+          +   '<div class="wa-item-icon">' + iconOf(name) + '</div>'
+          +   '<div class="wa-item-main"><div class="wa-item-name">' + esc(name) + '</div><div class="wa-item-meta">' + fmtWhen(w.start) + '</div></div>'
+          +   '<div class="wa-item-strain"><div class="wa-item-strain-num">' + (s.strain != null ? Number(s.strain).toFixed(1) : '—') + '</div><div class="wa-item-strain-lbl">STRAIN</div></div>'
+          + '</div>'
+          + '<div class="wa-item-facts">' + facts.join('') + '</div>'
+          + '<div class="wa-zones">' + zoneBar(s.zone_durations) + '</div>'
+          + '</div>';
+      }).join('');
+      $('waMore').style.display = inRange.length > shown ? '' : 'none';
+    }
+
+    async function loadData() {
+      let t = load(); if (!t || !t.access) return;
+      if (t.expires && Date.now() > t.expires - 60000) { const n = await refreshTok(t); if (n) t = n; }
+      showErr('');
+      try {
+        // Always pull 30 days so switching the range needs no refetch.
+        const start = new Date(Date.now() - 30 * 864e5).toISOString();
+        const all = [];
+        let next = null;
+        for (let page = 0; page < 6; page++) {
+          const params = { limit: '25', start };
+          if (next) params.nextToken = next;
+          const j = await whFetch('/activity/workout', params, t);
+          (j.records || []).forEach(r => all.push(r));
+          next = j.next_token;
+          if (!next) break;
+        }
+        workouts = all.sort((a, b) => new Date(b.start) - new Date(a.start));
+        render();
+      } catch (e) {
+        showErr(e.message || String(e));
+      }
+    }
+
+    $('waRange').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-days]'); if (!b) return;
+      rangeDays = Number(b.dataset.days); shown = PAGE;
+      $('waRange').querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+      render();
+    });
+    $('waMore').addEventListener('click', () => { shown += PAGE; render(); });
+    $('waRefresh').addEventListener('click', async (e) => {
+      const btn = e.currentTarget; btn.classList.add('spin');
+      try { await loadData(); } finally { setTimeout(() => btn.classList.remove('spin'), 600); }
+    });
+
+    const t = load();
+    if (t && t.access) { $('waConn').style.display = ''; loadData(); }
+    else { $('waDisc').style.display = ''; }
+  })();
+  </script>
+
   <!-- Progress photos overlay -->
   <div class="wt-overlay" id="wtOverlay" aria-hidden="true">
     <div class="wt-overlay-inner">
