@@ -1595,16 +1595,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:14px">
       <div>
         <div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Total net worth</div>
-        <div id="netWorthTotal" style="font-size:34px;font-weight:700;color:var(--text-primary);line-height:1.05;margin-top:2px">CHF 0</div>
+        <div id="netWorthTotal" style="font-size:34px;font-weight:700;color:var(--text-primary);line-height:1.05;margin-top:2px">0 Ft</div>
         <div id="netWorthBreakdown" style="font-size:11px;color:var(--text-tertiary);margin-top:4px"></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
-        <span style="font-size:11px;color:var(--text-tertiary)">CHF</span>
         <select id="netWorthCurrency" style="background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:12px;font-family:inherit;cursor:pointer">
-          <option value="CHF">CHF</option>
-          <option value="USD">USD</option>
+          <option value="HUF">Ft</option>
           <option value="EUR">EUR</option>
-          <option value="GBP">GBP</option>
+          <option value="USD">USD</option>
+          <option value="RON">Lei</option>
         </select>
       </div>
     </div>
@@ -1737,7 +1736,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:12px">
       <div>
         <div style="font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.04em;font-weight:500">Monthly burn</div>
-        <div id="subsTotal" style="font-size:28px;font-weight:700;color:var(--text-primary);line-height:1.1;margin-top:2px">CHF 0 <span style="font-size:13px;color:var(--text-tertiary);font-weight:500">/ mo</span></div>
+        <div id="subsTotal" style="font-size:28px;font-weight:700;color:var(--text-primary);line-height:1.1;margin-top:2px">0 Ft <span style="font-size:13px;color:var(--text-tertiary);font-weight:500">/ mo</span></div>
         <div id="subsYearly" style="font-size:11px;color:var(--text-tertiary);margin-top:2px"></div>
       </div>
       <div id="subsCount" style="font-size:11px;color:var(--text-tertiary)"></div>
@@ -1748,10 +1747,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       <input type="text" placeholder="Service (e.g. Netflix)" id="subName" style="flex:1.5;min-width:120px" />
       <input type="number" placeholder="Amount" id="subAmount" step="0.01" style="flex:1;max-width:100px" />
       <select id="subCurrency" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);max-width:90px">
-        <option value="CHF">CHF</option>
-        <option value="USD">USD</option>
+        <option value="HUF">Ft</option>
         <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="RON">Lei</option>
       </select>
       <select id="subPeriod" style="padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius-md);font-size:12px;font-family:inherit;background:var(--bg-card);color:var(--text-primary);max-width:100px">
         <option value="monthly">Monthly</option>
@@ -1785,10 +1784,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       <input type="text"   id="ordName"   placeholder="Item (e.g. New iPhone)" class="ord-input ord-input-name">
       <input type="number" id="ordCost"   placeholder="Cost" step="0.01" class="ord-input ord-input-cost">
       <select id="ordCurrency" class="ord-input ord-input-ccy">
-        <option value="CHF">CHF</option>
-        <option value="USD">USD</option>
+        <option value="HUF">Ft</option>
         <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="RON">Lei</option>
       </select>
       <select id="ordFromCat" class="ord-input ord-input-from" title="Which net worth account this comes out of">
         <option value="">No accounts yet</option>
@@ -1822,7 +1821,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <div class="wish-hero-top">
       <div>
         <div class="wish-hero-eyebrow">WISHLIST TOTAL</div>
-        <div class="wish-hero-num" id="wishTotal">CHF 0</div>
+        <div class="wish-hero-num" id="wishTotal">0 Ft</div>
       </div>
       <div class="wish-hero-pct-wrap">
         <div class="wish-hero-pct-label">% OF NET WORTH</div>
@@ -1842,10 +1841,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       <input type="text"   id="wishName"   placeholder="Item name (e.g. New iPhone Pro Max)" class="wish-input wish-input-name">
       <input type="number" id="wishAmount" placeholder="Cost" step="0.01" class="wish-input wish-input-amt">
       <select id="wishCurrency" class="wish-input wish-input-ccy">
-        <option value="CHF">CHF</option>
-        <option value="USD">USD</option>
+        <option value="HUF">Ft</option>
         <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
+        <option value="USD">USD</option>
+        <option value="RON">Lei</option>
       </select>
       <button class="wish-add-btn" id="wishAddBtn" onclick="window.__addWish && window.__addWish()">+ Add</button>
     </div>
@@ -1949,30 +1948,52 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   const netWorthTotal = document.getElementById('netWorthTotal');
   const netWorthBreakdown = document.getElementById('netWorthBreakdown');
 
-  let exchangeRates = { CHF: 1, USD: 1, EUR: 1, GBP: 1 };
+  // Amounts are stored in CHF (the original base) so existing data stays
+  // valid; everything is entered and shown in one of CCYS, Ft by default.
+  const CCYS = ['HUF', 'EUR', 'USD', 'RON'];
+  const DEFAULT_CCY = 'HUF';
+  const RATES_KEY = 'fx_rates_chf';
+  // Rough fallbacks so Ft never shows raw CHF numbers before the fetch lands.
+  let exchangeRates = { CHF: 1, HUF: 420, EUR: 1.07, USD: 1.25, RON: 5.3, GBP: 0.93 };
+  try {
+    const cached = JSON.parse(localStorage.getItem(RATES_KEY));
+    if (cached && cached.HUF) exchangeRates = Object.assign(exchangeRates, cached);
+  } catch (e) {}
   async function loadExchangeRates() {
     try {
       const res = await fetch('https://open.er-api.com/v6/latest/CHF');
       const data = await res.json();
       if (data && data.rates) {
-        exchangeRates = {
-          CHF: 1,
-          USD: data.rates.USD || 1,
-          EUR: data.rates.EUR || 1,
-          GBP: data.rates.GBP || 1
-        };
+        ['HUF', 'EUR', 'USD', 'RON', 'GBP'].forEach(c => { if (data.rates[c]) exchangeRates[c] = data.rates[c]; });
+        exchangeRates.CHF = 1;
+        try { localStorage.setItem(RATES_KEY, JSON.stringify(exchangeRates)); } catch (e) {}
         renderAllNetWorth();
         if (typeof renderSubs === 'function') renderSubs();
+        if (typeof renderWishlist === 'function') renderWishlist();
+        if (typeof renderOrders === 'function') renderOrders();
       }
     } catch (e) {}
   }
   loadExchangeRates();
 
+  function displayCcy() { return (currencyEl && currencyEl.value) || DEFAULT_CCY; }
+  function fmtNum(num, ccy) {
+    if (ccy === 'HUF') return Math.round(num).toLocaleString('hu-HU');
+    return num.toLocaleString('en-US', { minimumFractionDigits: num % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 });
+  }
+  // Formats an amount already in `ccy`: 12 345 Ft, €12.50, $12.50, 12.50 lei.
+  function fmtCcy(num, ccy) {
+    num = Number(num) || 0;
+    const s = fmtNum(num, ccy);
+    if (ccy === 'HUF') return s + ' Ft';
+    if (ccy === 'RON') return s + ' lei';
+    if (ccy === 'EUR') return '€' + s;
+    if (ccy === 'USD') return '$' + s;
+    return ccy + ' ' + s;
+  }
   function fmtMoney(amountCHF) {
-    const symbol = currencyEl ? currencyEl.value : 'CHF';
-    const rate = exchangeRates[symbol] || 1;
-    const num = (Number(amountCHF) || 0) * rate;
-    return symbol + ' ' + num.toLocaleString('en-US', { minimumFractionDigits: num % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 });
+    const ccy = displayCcy();
+    return fmtCcy((Number(amountCHF) || 0) * (exchangeRates[ccy] || 1), ccy);
   }
 
   function renderNetWorthCategory(cat) {
@@ -2011,7 +2032,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   function beginNwAmountEdit(amtEl, items, idx, catKey) {
     if (amtEl.querySelector('input')) return;
-    const symbol = currencyEl ? currencyEl.value : 'CHF';
+    const symbol = displayCcy();
     const rate = exchangeRates[symbol] || 1;
     const curCHF = Number(items[idx].amount) || 0;
     const curDisplay = curCHF * rate;
@@ -2232,7 +2253,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       return;
     }
     empty.classList.add('hidden');
-    total.textContent = fmtMoney(grand).split(' ')[1] || fmtMoney(grand);
+    total.textContent = fmtNum(grand * (exchangeRates[displayCcy()] || 1), displayCcy());
     count.textContent = slices.length + ' slice' + (slices.length === 1 ? '' : 's');
 
     // Sort largest first
@@ -2393,7 +2414,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       // Interpret the input in the CURRENTLY SELECTED display currency, then
       // convert to CHF for storage. So if USD is selected and user types 40000,
       // we store 40000 / USD-per-CHF rate — 31,400 CHF; displays as $40,000.
-      const symbol = currencyEl ? currencyEl.value : 'CHF';
+      const symbol = displayCcy();
       const rate = exchangeRates[symbol] || 1;
       const amountCHF = a / rate;
       const items = storeGet('nw:' + cat.key) || [];
@@ -2410,7 +2431,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
   if (currencyEl) {
     const savedCur = storeGet(CURRENCY_KEY);
-    if (savedCur) currencyEl.value = savedCur;
+    currencyEl.value = CCYS.includes(savedCur) ? savedCur : DEFAULT_CCY;
     currencyEl.addEventListener('change', () => {
       storeSet(CURRENCY_KEY, currencyEl.value);
       renderAllNetWorth();
@@ -2520,8 +2541,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const cost = document.createElement('div');
       cost.style.cssText = 'text-align:right;line-height:1.1';
       const bigNum = fmtMoney(m);
-      const origHint = (it.entered_currency && it.entered_currency !== 'CHF' && it.entered_amount != null)
-        ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + it.entered_currency + ' ' + Number(it.entered_amount).toLocaleString('en-US', { minimumFractionDigits: it.entered_amount % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 }) + ' / ' + it.period + '</div>'
+      const origHint = (it.entered_currency && it.entered_currency !== displayCcy() && it.entered_amount != null)
+        ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + fmtCcy(it.entered_amount, it.entered_currency) + ' / ' + it.period + '</div>'
         : (it.period !== 'monthly'
             ? '<div style="font-size:10px;color:var(--text-tertiary);margin-top:2px">billed ' + fmtMoney(it.amount) + ' / ' + it.period + '</div>'
             : '');
@@ -2653,8 +2674,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     const periodOpts = ['monthly','yearly','weekly'].map(p =>
       '<option value="' + p + '"' + (p === it.period ? ' selected' : '') + '>' + p.charAt(0).toUpperCase() + p.slice(1) + '</option>'
     ).join('');
-    const ccyOpts = ['CHF','USD','EUR','GBP'].map(c =>
-      '<option value="' + c + '"' + (c === enteredCcy ? ' selected' : '') + '>' + c + '</option>'
+    // Older entries may be in CHF/GBP — keep that option so editing doesn't silently convert.
+    const ccyList = CCYS.includes(enteredCcy) ? CCYS : CCYS.concat(enteredCcy);
+    const CCY_LABELS = { HUF: 'Ft', RON: 'Lei' };
+    const ccyOpts = ccyList.map(c =>
+      '<option value="' + c + '"' + (c === enteredCcy ? ' selected' : '') + '>' + (CCY_LABELS[c] || c) + '</option>'
     ).join('');
     // Build From-account options from the live NW accounts
     const accounts = (typeof listAllNwAccounts === 'function') ? listAllNwAccounts() : [];
@@ -2727,7 +2751,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const n = (nEl.value || '').trim();
       const aRaw = parseFloat(aEl.value);
       if (!n || isNaN(aRaw)) { nEl.focus(); return; }
-      const enteredCcy = ccEl ? ccEl.value : 'CHF';
+      const enteredCcy = ccEl ? ccEl.value : DEFAULT_CCY;
       const rate = exchangeRates[enteredCcy] || 1;
       const amountCHF = aRaw / rate;
       // Parse "From" selection — value is "catKey::accountName"
@@ -2839,7 +2863,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
           '<div class="wish-row-h">'
         + '<div class="wish-row-info">'
         +   '<div class="wish-row-name">' + escapeHtml(it.name) + '</div>'
-        +   '<div class="wish-row-meta">' + (it.entered_currency || 'CHF') + ' ' + Number(it.entered_amount != null ? it.entered_amount : it.amount).toLocaleString('en-US', {maximumFractionDigits: 2}) + ' · added ' + fmtActivityDate(it.ts || Date.now()) + '</div>'
+        +   '<div class="wish-row-meta">' + fmtCcy(it.entered_amount != null ? it.entered_amount : it.amount, it.entered_currency || 'CHF') + ' · added ' + fmtActivityDate(it.ts || Date.now()) + '</div>'
         + '</div>'
         + '<div class="wish-row-amt-wrap">'
         +   '<div class="wish-row-amt">' + fmtMoney(cost) + '</div>'
@@ -2869,7 +2893,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const n = (nEl.value || '').trim();
       const aRaw = parseFloat(aEl.value);
       if (!n || isNaN(aRaw)) { nEl.focus(); return; }
-      const enteredCcy = cEl ? cEl.value : 'CHF';
+      const enteredCcy = cEl ? cEl.value : DEFAULT_CCY;
       const rate = exchangeRates[enteredCcy] || 1;
       const amountCHF = aRaw / rate;
       const arr = storeGet('wishlist') || [];
@@ -3181,7 +3205,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       prev.className = 'ord-add-preview';
       return;
     }
-    const ccy = ccyEl ? ccyEl.value : 'CHF';
+    const ccy = ccyEl ? ccyEl.value : DEFAULT_CCY;
     const rate = exchangeRates[ccy] || 1;
     const amountCHF = aRaw / rate;
     const grand = nwGrandCHF();
@@ -3208,7 +3232,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       const n = (nEl.value || '').trim();
       const aRaw = parseFloat(aEl.value);
       if (!n || isNaN(aRaw)) { nEl.focus(); return; }
-      const ccy = cEl ? cEl.value : 'CHF';
+      const ccy = cEl ? cEl.value : DEFAULT_CCY;
       const rate = exchangeRates[ccy] || 1;
       const amountCHF = aRaw / rate;
       const parsed = parseFromValue(fEl ? fEl.value : '');
